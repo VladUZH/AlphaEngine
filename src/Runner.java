@@ -14,9 +14,6 @@ public class Runner {
     private double extreme;
     private double reference;
     private double expectedDcLevel, expectedOsLevel;
-    public double expectedUpIELevel, expectedDownIELevel;
-    public int typeExpectedUp, typeExpectedDown; // 1 for DC, 2 for OS
-    public double downEventThreshold, upEventThreshold;
 
 
     public Runner(double deltaUp, double deltaDown, double dStarUp, double dStarDown){
@@ -81,18 +78,8 @@ public class Runner {
     private void findExpectedDClevel(){
         if (mode == -1){
             expectedDcLevel = Math.exp(Math.log(extreme) + deltaUp);
-            expectedUpIELevel = expectedDcLevel;
-            typeExpectedUp = 1;
-            typeExpectedDown = 2;
-            upEventThreshold = deltaUp;
-            downEventThreshold = dStarDown;
         } else {
             expectedDcLevel = Math.exp(Math.log(extreme) - deltaDown);
-            expectedDownIELevel = expectedDcLevel;
-            typeExpectedDown = 1;
-            typeExpectedUp = 2;
-            upEventThreshold = dStarUp;
-            downEventThreshold = deltaDown;
         }
     }
     
@@ -100,10 +87,8 @@ public class Runner {
     private void findExpectedOSlevel(){
         if (mode == -1){
             expectedOsLevel = Math.exp(Math.log(reference) - dStarDown);
-            expectedDownIELevel = expectedOsLevel;
         } else {
             expectedOsLevel = Math.exp(Math.log(reference) + dStarUp);
-            expectedUpIELevel = expectedOsLevel;
         }
     }
 
@@ -115,6 +100,24 @@ public class Runner {
 
     public double getExpectedOsLevel(){
         return expectedOsLevel;
+    }
+
+
+    public double getExpectedUpperIE(){
+        if (expectedDcLevel > expectedOsLevel){
+            return expectedDcLevel;
+        } else {
+            return expectedOsLevel;
+        }
+    }
+
+
+    public double getExpectedLowerIE(){
+        if (expectedDcLevel < expectedOsLevel){
+            return expectedDcLevel;
+        } else {
+            return expectedOsLevel;
+        }
     }
 
 
@@ -140,6 +143,24 @@ public class Runner {
 
     public double getdStarDown() {
         return dStarDown;
+    }
+
+
+    public int getUpperIEtype(){
+        if (expectedDcLevel > expectedOsLevel){
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+
+    public int getLowerIEtype(){
+        if (expectedDcLevel < expectedOsLevel){
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
 

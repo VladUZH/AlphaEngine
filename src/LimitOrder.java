@@ -67,4 +67,32 @@ public class LimitOrder {
         compensatedOrders = new LinkedList<>();
     }
 
+    public void setCompensatedOrders(LinkedList<LimitOrder> compensatedOrders){
+        this.compensatedOrders = compensatedOrders;
+        volume = computeCompensatedVolume();
+    }
+
+    public float computeCompensatedVolume(){
+        float compensatedVolume = 0;
+        for (LimitOrder aCompensatedOrder : compensatedOrders){
+            compensatedVolume += aCompensatedOrder.getVolume();
+        }
+        return compensatedVolume;
+    }
+
+
+    public double getRelativePnL(){
+        double relativePnL = 0;
+        for (LimitOrder aCompensatedOrder : compensatedOrders){
+            double absPriceMove = (aCompensatedOrder.getLevel() - level) * type;
+            if (absPriceMove < 0){
+                System.out.println("Negative price move when Sell? " + absPriceMove);
+            }
+            relativePnL += absPriceMove / aCompensatedOrder.getLevel() * aCompensatedOrder.getVolume();
+        }
+        return relativePnL;
+    }
+
+
+
 }
