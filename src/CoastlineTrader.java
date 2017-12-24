@@ -253,14 +253,9 @@ public class CoastlineTrader {
 
     private LinkedList<LimitOrder> findCompensatedOrdersList(double levelOrder, double delta, int buySell){
         LinkedList<LimitOrder> compensatedOrders = new LinkedList<>();
-        boolean first = true;
         for (LimitOrder aDisbalancedOrder : disbalancedOrders){
-            if (first){
-                first = false;
-            } else {
-                if ((aDisbalancedOrder.getLevel() - levelOrder) * buySell >= delta * aDisbalancedOrder.getLevel()){
-                    compensatedOrders.add(aDisbalancedOrder);
-                }
+            if ((aDisbalancedOrder.getLevel() - levelOrder) * buySell >= delta * aDisbalancedOrder.getLevel()){
+                compensatedOrders.add(aDisbalancedOrder);
             }
         }
         return compensatedOrders;
